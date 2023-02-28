@@ -14,10 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static org.genesiscode.jwtpractice.config.SecurityConstants.ONE_HOUR;
+import static org.genesiscode.jwtpractice.config.SecurityConstants.ONE_MINUTE;
+import static org.genesiscode.jwtpractice.config.SecurityConstants.SECRET_KEY;
+
 @Service
 public class JwtService {
-
-    private static final String SECRET_KEY = "this generated of a web page, we should don't write";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -37,8 +39,8 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(getSignInKey(), SignatureAlgorithm.ES256)
+                .setExpiration(new Date(System.currentTimeMillis() + ONE_HOUR + ONE_MINUTE))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 

@@ -20,6 +20,9 @@ public class AuthenticationService {
     private final AuthenticationManager manager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+
+        //TODO: register user with unique email
+
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
