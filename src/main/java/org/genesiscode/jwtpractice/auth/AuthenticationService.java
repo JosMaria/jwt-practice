@@ -20,8 +20,10 @@ public class AuthenticationService {
     private final AuthenticationManager manager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-
-        //TODO: register user with unique email
+        // TODO: show me 403 forbidden and better logs when happens its
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException(String.format("Username with email %s already exists", request.getEmail()));
+        }
 
         var user = User.builder()
                 .firstname(request.getFirstname())
@@ -41,9 +43,7 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        manager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+        manager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
